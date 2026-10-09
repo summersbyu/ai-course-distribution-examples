@@ -1,0 +1,14 @@
+{
+  "name": "byu-ai-course-examples",
+  "description": "Example class marketplace for the BYU accounting AI course. Teams publish plugins here; classmates install them by name.",
+  "owner": {
+    "name": "BYU School of Accountancy AI course (example)"
+  },
+  "plugins": [
+    {
+      "name": "month-end-close-toolkit",
+      "source": "./3-team-builder/plugins/month-end-close-toolkit",
+      "description": "Close checklist tracker and flux commentary drafts for accounting teams"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+# Never commit real secrets
+.streamlit/secrets.toml
+**/.streamlit/secrets.toml
+.env
+*.key
+
+__pycache__/
+.pytest_cache/
+.DS_Store

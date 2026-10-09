@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Depreciation Schedule Builder</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f7f6f2; --surface: #ffffff; --text: #1d2330; --muted: #5b6474;
+    --line: #dcdfe5; --accent: #0b4f8a; --accent-soft: #dce8f5; --ok: #1f7a4d; --bad: #b3261e;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151b; --surface: #1b2029; --text: #e7eaf0; --muted: #a0a8b6;
+      --line: #2f3643; --accent: #7fb6ea; --accent-soft: #233447; --ok: #6fd3a0; --bad: #ff8a80;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); line-height: 1.5; }
+  main { max-width: 920px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 1.75rem; margin: 0 0 4px; }
+  .lede { color: var(--muted); margin: 0 0 24px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  form { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 16px; }
+  label { display: grid; gap: 6px; font-size: .9rem; font-weight: 600; }
+  input, select { width: 100%; min-width: 0; font: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--text); }
+  input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: right; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  .bar { display: inline-block; height: 10px; background: var(--accent); border-radius: 3px; vertical-align: middle; }
+  .bar-cell { width: 28%; text-align: left; }
+  .check { display: flex; gap: 10px; align-items: baseline; font-weight: 600; }
+  .check.ok { color: var(--ok); } .check.bad { color: var(--bad); }
+  .note { font-size: .9rem; color: var(--muted); }
+  .tag { display: inline-block; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 10px; font-size: .8rem; font-weight: 600; margin-bottom: 12px; }
+  .table-wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+  <span class="tag">Stage 2 example · vibe-coded · hosted free on GitHub Pages</span>
+  <h1>Depreciation Schedule Builder</h1>
+  <p class="lede">Enter an asset and compare straight-line, double-declining-balance, and sum-of-the-years'-digits schedules.</p>
+
+  <section class="card" aria-labelledby="inputs-h">
+    <h2 id="inputs-h" class="note" style="margin-top:0">Asset</h2>
+    <form id="f">
+      <label>Cost ($)<input id="cost" type="number" min="0" step="100" value="50000" inputmode="decimal"></label>
+      <label>Salvage value ($)<input id="salvage" type="number" min="0" step="100" value="5000" inputmode="decimal"></label>
+      <label>Useful life (years)<input id="life" type="number" min="1" max="40" step="1" value="5"></label>
+      <label>Method
+        <select id="method">
+          <option value="sl">Straight-line</option>
+          <option value="ddb">Double-declining balance</option>
+          <option value="syd">Sum-of-the-years' digits</option>
+        </select>
+      </label>
+    </form>
+  </section>
+
+  <section class="card" aria-labelledby="sched-h" aria-live="polite">
+    <h2 id="sched-h" style="margin-top:0;font-size:1.1rem">Schedule</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Year</th><th>Beginning book value</th><th>Depreciation</th><th>Accumulated</th><th>Ending book value</th><th class="bar-cell" aria-hidden="true"></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p id="check" class="check"></p>
+  </section>
+
+  <section class="card">
+    <h2 style="margin-top:0;font-size:1.1rem">How this was shared</h2>
+    <p class="note">This page is a single HTML file built by prompting an AI. It lives in a GitHub repository, and GitHub Pages serves it for free. It has no server, no database, and no API key, so it is safe to make public. Anyone can open the link; nobody needs an account.</p>
+    <p class="note">The built-in check above is the validation step: total depreciation must equal cost minus salvage, and book value must never fall below salvage.</p>
+  </section>
+</main>
+<script>
+  const $ = (id) => document.getElementById(id);
+  const money = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+
+  function schedule(cost, salvage, life, method) {
+    const base = cost - salvage, rows = [];
+    let book = cost, acc = 0;
+    const sydTotal = life * (life + 1) / 2;
+    for (let y = 1; y <= life; y++) {
+      let dep;
+      if (method === "sl") dep = base / life;
+      else if (method === "syd") dep = base * (life - y + 1) / sydTotal;
+      else {
+        dep = book * (2 / life);
+        // DDB never takes book value below salvage; the last year plugs to salvage
+        if (book - dep < salvage || y === life) dep = book - salvage;
+      }
+      dep = Math.max(0, Math.round(dep * 100) / 100);
+      acc = Math.round((acc + dep) * 100) / 100;
+      rows.push({ y, begin: book, dep, acc, end: Math.round((book - dep) * 100) / 100 });
+      book = rows.at(-1).end;
+    }
+    return rows;
+  }
+
+  function render() {
+    const cost = +$("cost").value, salvage = +$("salvage").value, life = Math.round(+$("life").value), method = $("method").value;
+    const tbody = $("rows"), check = $("check");
+    tbody.replaceChildren();
+    if (!(cost > 0) || salvage < 0 || salvage >= cost || !(life >= 1 && life <= 40)) {
+      check.className = "check bad";
+      check.textContent = "Enter a cost above zero, a salvage value below cost, and a life of 1 to 40 years.";
+      return;
+    }
+    const rows = schedule(cost, salvage, life, method);
+    const max = Math.max(...rows.map(r => r.dep)) || 1;
+    for (const r of rows) {
+      const tr = document.createElement("tr");
+      for (const v of [r.y, money.format(r.begin), money.format(r.dep), money.format(r.acc), money.format(r.end)]) {
+        const td = document.createElement("td"); td.textContent = v; tr.append(td);
+      }
+      const bar = document.createElement("td"); bar.className = "bar-cell"; bar.setAttribute("aria-hidden", "true");
+      const span = document.createElement("span"); span.className = "bar"; span.style.width = (r.dep / max * 100) + "%";
+      bar.append(span); tr.append(bar); tbody.append(tr);
+    }
+    const total = rows.at(-1).acc, expected = Math.round((cost - salvage) * 100) / 100;
+    const floorOk = rows.every(r => r.end >= salvage - 0.005);
+    const ok = Math.abs(total - expected) < 0.01 && floorOk;
+    check.className = "check " + (ok ? "ok" : "bad");
+    check.textContent = (ok ? "✓ Check passed: " : "✗ Check failed: ") +
+      `total depreciation ${money.format(total)} vs. cost minus salvage ${money.format(expected)}` +
+      (floorOk ? "; book value never drops below salvage." : "; book value fell below salvage.");
+  }
+
+  $("f").addEventListener("input", render);
+  render();
+</script>
+</body>
+</html>

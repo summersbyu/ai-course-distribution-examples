@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>AI Course Distribution Examples</title>
+<style>
+  /* Layout: one column; a short intro, then four stage rows that read top to bottom as a ladder */
+  :root {
+    --bg: #f3f5f2; --surface: #ffffff; --ink: #18211d; --muted: #5a6760; --rule: #d5ddd7;
+    --accent: #1d6b4a; --accent-soft: #e2efe8;
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121815; --surface: #1a221e; --ink: #e5ece7; --muted: #9aa8a0; --rule: #2c3832; --accent: #6cc79c; --accent-soft: #1f3329; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.55; }
+  main { max-width: 860px; margin: 0 auto; padding-inline: 16px; padding-block: 36px 64px; display: grid; gap: 18px; }
+  .eyebrow { font: 600 .75rem ui-monospace, Menlo, monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: clamp(1.8rem, 5vw, 2.4rem); line-height: 1.1; margin: 4px 0 6px; text-wrap: balance; }
+  .lede { color: var(--muted); margin: 0 0 8px; max-width: 64ch; }
+  .stage { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 18px 20px; display: grid; grid-template-columns: 3.2rem 1fr; gap: 4px 14px; }
+  .num { grid-row: span 3; font: 800 2rem/1 system-ui, sans-serif; color: var(--accent); font-variant-numeric: tabular-nums; }
+  h2 { font-size: 1.15rem; margin: 0; }
+  .host { font-size: .9rem; color: var(--muted); margin: 0; }
+  ul { margin: 6px 0 0; padding-left: 1.1em; display: grid; gap: 4px; }
+  a { color: var(--accent); font-weight: 600; text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  .chip { display: inline-block; font-size: .72rem; font-weight: 600; background: var(--accent-soft); color: var(--accent); border-radius: 4px; padding: 1px 6px; margin-left: 6px; vertical-align: 1px; }
+  footer { color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">BYU School of Accountancy · AI course</div>
+    <h1>How students share what they build</h1>
+    <p class="lede">One working example per stage. Each stage needs a little more infrastructure than the one before, and only the last one needs real hosting. All data is synthetic.</p>
+  </header>
+
+  <section class="stage">
+    <div class="num">1</div>
+    <h2>Power user: a shared prompt library</h2>
+    <p class="host">Lives in GitHub (Drive also works) · no hosting</p>
+    <ul>
+      <li><a href="https://github.com/summersbyu/ai-course-distribution-examples/tree/main/1-power-user">Prompt templates and project instructions</a></li>
+    </ul>
+  </section>
+
+  <section class="stage">
+    <div class="num">2</div>
+    <h2>Personal builder: skills and vibe-coded apps</h2>
+    <p class="host">GitHub, GitHub Pages, and a Claude artifact · free, nothing to set up</p>
+    <ul>
+      <li><a href="apps/depreciation-calculator.html">Depreciation Schedule Builder</a><span class="chip">GitHub Pages</span></li>
+      <li><a href="https://claude.ai/artifact/LJDBW7AgBSma4mgikAFMK4">Accounting Study Coach</a><span class="chip">Claude artifact · AI on the viewer's account</span></li>
+      <li><a href="https://github.com/summersbyu/ai-course-distribution-examples/tree/main/2-personal-builder/skills/journal-entry-reviewer">Journal entry reviewer skill</a><span class="chip">Skill ZIP</span></li>
+    </ul>
+  </section>
+
+  <section class="stage">
+    <div class="num">3</div>
+    <h2>Team builder: a class marketplace and a shared board</h2>
+    <p class="host">GitHub as a plugin marketplace, and a Claude artifact with shared data · free</p>
+    <ul>
+      <li><a href="https://github.com/summersbyu/ai-course-distribution-examples/tree/main/3-team-builder">Month-end close toolkit plugin and install commands</a></li>
+      <li><a href="https://claude.ai/artifact/4wZM4pzV7hgpmuNXhRj6h8">Month-End Close Board</a><span class="chip">Claude artifact · shared live data</span></li>
+    </ul>
+  </section>
+
+  <section class="stage">
+    <div class="num">4</div>
+    <h2>Developer: an app that holds an API key</h2>
+    <p class="host">GitHub + Streamlit Community Cloud · free hosting; API use costs money</p>
+    <ul>
+      <li><a href="https://github.com/summersbyu/ai-course-distribution-examples/tree/main/4-developer/sql-analyst">AI SQL Analyst: code, safety checks, and deploy steps</a></li>
+    </ul>
+  </section>
+
+  <footer>Claude artifact links open only for people the owner has shared them with.</footer>
+</main>
+</body>
+</html>
