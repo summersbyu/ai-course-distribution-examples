@@ -1,0 +1,21 @@
+{
+  "name": "Accounting Lab 01",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+  "hostRequirements": {"cpus": 2, "memory": "4gb"},
+  "postCreateCommand": "bash pilot-lab/scripts/setup.sh",
+  "postStartCommand": "bash pilot-lab/scripts/start.sh",
+  "waitFor": "postCreateCommand",
+  "forwardPorts": [8501],
+  "portsAttributes": {
+    "8501": {"label": "Accounting Lab", "onAutoForward": "openBrowser"}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "workbench.startupEditor": "readme",
+        "workbench.editor.enablePreview": false,
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  }
+}
