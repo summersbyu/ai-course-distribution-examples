@@ -7,3 +7,7 @@
 __pycache__/
 .pytest_cache/
 .DS_Store
+
+# Pilot student records and machine-specific runtime are never source files.
+.lab-data/
+.lab-runtime/

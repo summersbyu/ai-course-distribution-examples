@@ -1,5 +1,20 @@
 # AI Course Distribution Examples
 
+## Prepared first exercise pilot
+
+[Start or resume Accounting Lab 01](https://codespaces.new/summersbyu/ai-course-distribution-examples/tree/pilot-expense-sql-lab?quickstart=1)
+
+For this pilot choose the **pilot-expense-sql-lab** branch and **Accounting Lab 01** environment.
+The expense form and SQL lab start automatically. If no lab tab opens, use **View > Open View > Ports**,
+then open **Accounting Lab** on **8501** in the browser. Keep port visibility **Private**.
+No terminal setup commands or AI credentials are needed for the student exercise.
+
+Read the [student handout](pilot-lab/handouts/student-handout.md).
+Instructors should first complete the live readiness checks in the [preparation guide](pilot-lab/handouts/instructor-guide.md)
+and use the [colleague trial sheet](pilot-lab/handouts/colleague-trial.md) to evaluate onboarding.
+
+## Earlier distribution examples
+
 Working examples of how students share what they build at each stage of the BYU accounting AI course.
 Each stage needs a little more infrastructure than the one before. Only Stage 4 needs real hosting.
 
